@@ -1,0 +1,19 @@
+# CMake / Ninja / Make build directories
+/build/
+/build-*/
+/out/
+/dist/
+
+/*.o
+/*.obj
+/*.pdb
+/*.exe
+/*.dll
+/*.so
+/*.dylib
+
+# VSCode / CLion / IDE configs
+.vscode/
+.idea/
+*.user
+*.swp
