@@ -6,5 +6,6 @@
     "fcl",
     "eigen3",
     "urdfdom",
-    "urdfdom-headers"]
+    "urdfdom-headers",
+    "pybind11"]
 }
