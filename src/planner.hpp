@@ -532,10 +532,27 @@ struct InputShape {
   InShapeType                 type;
 };
 
+Eigen::VectorXd radiansToDegrees6(const Eigen::VectorXd& x) {
+    Eigen::VectorXd result = x;  // copy so original isn't modified
+    for (int i = 0; i < 6; ++i) {
+        result[i] = x[i] * 180.0 / PI;
+    }
+    return result;
+}
+
+// Convert first 6 elements from degrees → radians
+Eigen::VectorXd degreesToRadians6(const Eigen::VectorXd& x) {
+    Eigen::VectorXd result = x;
+    for (int i = 0; i < 6; ++i) {
+        result[i] = x[i] * PI / 180.0;
+    }
+    return result;
+}
+
 
 static std::vector<Eigen::VectorXd> run_planner(
-    const Eigen::VectorXd& q_start,
-    const Eigen::VectorXd& q_goal,
+    Eigen::VectorXd& q_start,
+    Eigen::VectorXd& q_goal,
     const std::vector<InputShape>& scene,
     const std::vector<InputShape>& load,
     const Eigen::Matrix<double,6,1>& tool,
@@ -547,6 +564,8 @@ static std::vector<Eigen::VectorXd> run_planner(
 
     const int DOF = static_cast<int>(q_start.size());
 
+    q_start = degreesToRadians6(q_start);
+    q_goal = degreesToRadians6(q_goal);
     //starting planner section:
 
     // Your chain in order:
@@ -640,17 +659,7 @@ static std::vector<Eigen::VectorXd> run_planner(
 
     JointSpacePlanner planner(DOF, limits, links, lastLinkIndex, fk_cb, out_scene, out_load, frame, opts, cfg);
 
-    // 6) Plan
-    Eigen::VectorXd qStart = Eigen::VectorXd::Zero(DOF);
-    Eigen::VectorXd qGoal  = Eigen::VectorXd::Zero(DOF);
-    if (DOF >= 6) {
-        qStart.head<6>() << -3.0, 0.0, 0.0, 0.0, 0.0, 0.0;
-    }
-    if (DOF >= 7) {
-        qStart[6] = 0.0;
-    }
-
-    auto result = planner.plan(qStart, qGoal);
+    auto result = planner.plan(q_start, q_goal);
     if (!result.solved) { std::vector<Eigen::VectorXd> empty_path; return  empty_path;}
 
     /*
@@ -659,6 +668,11 @@ static std::vector<Eigen::VectorXd> run_planner(
         for (int i=0;i<q.size();++i) std::cout << q[i] << (i+1<q.size()? " , " : "] , \n [");
     }
     */
+
+    for(int i = 0 ;i<results.path.size();i++){
+        results.path[i] = radiansToDegrees6( results.path[i] );
+    }
+
     return result.path;
 }
 

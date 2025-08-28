@@ -89,8 +89,8 @@ PYBIND11_MODULE(dornaompl, m) {
 
   // Single function, kwargs-only style.
   m.def("plan",
-    [](const Eigen::VectorXd& start_joint,
-       const Eigen::VectorXd& goal_joint,
+    [](Eigen::VectorXd& start_joint,
+       Eigen::VectorXd& goal_joint,
        py::object scene,
        py::object load,
        const Eigen::Matrix<double,6,1>& tool,
