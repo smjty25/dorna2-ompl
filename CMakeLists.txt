@@ -158,3 +158,20 @@ if(EXISTS "${RESOURCE_SOURCE_DIR}")
           DESTINATION "${PY_SITEARCH_CMAKE}/dornaompl_data")
 endif()
 
+if(UNIX AND NOT APPLE)
+  # where vcpkg put the built libs
+  set(_vcpkg_libdir "${CMAKE_BINARY_DIR}/vcpkg_installed/${VCPKG_TARGET_TRIPLET}/lib")
+
+  # let the built module find libs in build dir and installed dir
+  set_target_properties(dornaompl PROPERTIES
+    BUILD_RPATH   "${_vcpkg_libdir}"
+    INSTALL_RPATH "$ORIGIN"
+  )
+
+  # install the needed .so files next to the module
+  install(DIRECTORY "${_vcpkg_libdir}/"
+          DESTINATION "${PY_SITEARCH_CMAKE}"
+          FILES_MATCHING
+            REGEX "lib(ompl|fcl|ccd|console_bridge|urdfdom.*|boost_.*)\\.so(\\..*)?$")
+endif()
+
