@@ -51,9 +51,9 @@ cd ~
 git clone dorna2-ompl
 cd dorna2-ompl
 
-cmake --preset rpi-arm64 -D Python3_EXECUTABLE="path/to/python3"
+cmake --preset rpi-arm64   -D Python3_EXECUTABLE="$(command -v python3)"   -D Python3_INCLUDE_DIR="/usr/include/python3.11"   -D Python3_LIBRARY="/usr/lib/aarch64-linux-gnu/libpython3.11.so"
 cmake --build build/rpi-arm64 --config Release -j
-cmake --install build/rpi-arm64 --config Release
+sudo cmake --install build/rpi-arm64 --config Release
 
 
 
