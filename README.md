@@ -45,9 +45,9 @@ vcpkg install pybind11
 git clone dorna2-ompl
 cd dorna2-ompl
 
-cmake --preset windows-vs2022 -D Python3_EXECUTABLE="C:/Users/jvd/AppData/Local/Programs/Python/Python39/python.exe"
-cmake --build build/windows-vs2022 --config Release -j
-cmake --install build/windows-vs2022 --config Release
+cmake --preset rpi-arm64 -D Python3_EXECUTABLE="path/to/python3"
+cmake --build build/rpi-arm64 --config Release -j
+cmake --install build/rpi-arm64 --config Release
 
 
 
