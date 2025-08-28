@@ -669,8 +669,8 @@ static std::vector<Eigen::VectorXd> run_planner(
     }
     */
 
-    for(int i = 0 ;i<results.path.size();i++){
-        results.path[i] = radiansToDegrees6( results.path[i] );
+    for(int i = 0 ;i<result.path.size();i++){
+        result.path[i] = radiansToDegrees6( result.path[i] );
     }
 
     return result.path;
