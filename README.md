@@ -30,8 +30,9 @@ For Linux:
 
 ```powershell
 
+git clone https://github.com/microsoft/vcpkg.git
+cd vcpkg
 ./bootstrap-vcpkg.sh
-
 echo 'export VCPKG_ROOT="$HOME/vcpkg"' >> ~/.bashrc
 echo 'export PATH="$VCPKG_ROOT:$PATH"' >> ~/.bashrc
 source ~/.bashrc
@@ -42,6 +43,7 @@ vcpkg install urdfdom-headers
 vcpkg install fcl
 vcpkg install pybind11
 
+cd ~
 git clone dorna2-ompl
 cd dorna2-ompl
 
