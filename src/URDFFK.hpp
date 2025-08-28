@@ -77,11 +77,11 @@ public:
 
     // Compute world transforms for each link name, same order as linkNames()
     // q size must equal dof() (revolute: radians; prismatic: meters)
-    void compute(const Eigen::VectorXd& q, std::vector<Eigen::Isometry3d>& linkWorld) const {
+    void compute(const Eigen::VectorXd& q, std::vector<Eigen::Isometry3d>& linkWorld , const Eigen::Isometry3d& base_trans) const {
         if ((size_t)q.size() != dof_) throw std::runtime_error("q size != dof");
 
         linkWorld.resize(linkNames_.size());
-        Eigen::Isometry3d T = Eigen::Isometry3d::Identity();
+        Eigen::Isometry3d T = base_trans;
         linkWorld[0] = T; // base
 
         size_t qi = 0;
