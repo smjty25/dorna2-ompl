@@ -30,6 +30,10 @@ For Linux:
 
 ```powershell
 
+sudo apt update
+sudo apt install pkg-config autoconf libtool intltool automake autoconf-archive gettext
+
+
 git clone https://github.com/microsoft/vcpkg.git
 cd vcpkg
 ./bootstrap-vcpkg.sh

@@ -36,14 +36,25 @@ list(GET _PY_INFO 0 PY_MM)
 list(GET _PY_INFO 1 PY_ROOT)
 list(GET _PY_INFO 2 PY_SITEARCH)
 
-set(PY_INCLUDE "${PY_ROOT}/include")
-set(PY_LIB     "${PY_ROOT}/libs/python${PY_MM}.lib")
+# If user supplied overrides, use them; else derive from Python3_EXECUTABLE
+if(DEFINED Python3_INCLUDE_DIR)
+  set(PY_INCLUDE "${Python3_INCLUDE_DIR}")
+else()
+  set(PY_INCLUDE "${PY_ROOT}/include") # Windows python.org layout
+endif()
 
+if(DEFINED Python3_LIBRARY)
+  set(PY_LIB "${Python3_LIBRARY}")
+else()
+  set(PY_LIB "${PY_ROOT}/libs/python${PY_MM}.lib") # Windows import lib
+endif()
+
+# Sanity checks
 if(NOT EXISTS "${PY_INCLUDE}/Python.h")
   message(FATAL_ERROR "Python headers not found at: ${PY_INCLUDE}/Python.h")
 endif()
 if(NOT EXISTS "${PY_LIB}")
-  message(FATAL_ERROR "Python import lib not found: ${PY_LIB}")
+  message(FATAL_ERROR "Python library not found: ${PY_LIB}")
 endif()
 
 # Normalize slashes so install() paths are clean on Windows
