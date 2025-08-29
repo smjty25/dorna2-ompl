@@ -553,6 +553,8 @@ Eigen::VectorXd degreesToRadians6(const Eigen::VectorXd& x) {
 static std::vector<Eigen::VectorXd> run_planner(
     Eigen::VectorXd& q_start,
     Eigen::VectorXd& q_goal,
+    Eigen::VectorXd& limit_n,
+    Eigen::VectorXd& limit_p,
     const std::vector<InputShape>& scene,
     const std::vector<InputShape>& load,
     const Eigen::Matrix<double,6,1>& tool,
@@ -566,6 +568,8 @@ static std::vector<Eigen::VectorXd> run_planner(
 
     q_start = degreesToRadians6(q_start);
     q_goal = degreesToRadians6(q_goal);
+    limit_n = degreesToRadians6(limit_n);
+    limit_p = degreesToRadians6(limit_p);
     //starting planner section:
 
     // Your chain in order:
@@ -577,7 +581,12 @@ static std::vector<Eigen::VectorXd> run_planner(
     const std::string urdfRel = "urdf/DornaTA.urdf";
     URDFFK urdf_fk(resource_path(urdfRel), linkNames);
 
-    auto limits = std::vector<std::pair<double,double>>(DOF, std::make_pair(-PI, PI));
+    //Building limit
+    std::vector<std::pair<double,double>> limits;
+    limits.reserve(limit_n.size());
+    for (int i = 0; i < limit_n.size(); ++i) {
+        limits.emplace_back(limit_n[i], limit_p[i]);
+    }
 
     // 2) Prepare link collision boxes (sizes & local offsets per link frame)
     // read per-link collisions from URDF

@@ -91,6 +91,8 @@ PYBIND11_MODULE(dornaompl, m) {
   m.def("plan",
     [](Eigen::VectorXd& start_joint,
        Eigen::VectorXd& goal_joint,
+       Eigen::VectorXd& limit_n,
+       Eigen::VectorXd& limit_p,
        py::object scene,
        py::object load,
        const Eigen::Matrix<double,6,1>& tool,
@@ -100,19 +102,21 @@ PYBIND11_MODULE(dornaompl, m) {
        double time_limit_sec)
     {
       if (start_joint.size() == 0) throw std::runtime_error("start_joint is empty");
-      if (goal_joint.size()  != start_joint.size())
+      if (goal_joint.size()  != start_joint.size() || limit_n.size()  != start_joint.size() || limit_p.size()  != start_joint.size())
         throw std::runtime_error("goal_joint must match start_joint size");
 
       auto scene_v = parse_shape_list(scene);
       auto load_v  = parse_shape_list(load);
       auto aux     = parse_aux(aux_dir);
 
-      auto wps = run_planner(start_joint, goal_joint, scene_v, load_v,
+      auto wps = run_planner(start_joint, goal_joint, limit_n, limit_p, scene_v, load_v,
                              tool, base_in_world, frame_in_world, aux, time_limit_sec);
       return to_numpy(wps);
     },
     py::arg("start_joint"),
     py::arg("goal_joint"),
+    py::arg("limit_n"),
+    py::arg("limit_p"),
     py::arg("scene") = py::none(),
     py::arg("load")  = py::none(),
     py::arg("tool"),

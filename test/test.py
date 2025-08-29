@@ -30,6 +30,8 @@ load.append({
 path = dornaompl.plan(
     start_joint   = np.array([0,0,0,0,0,0,0,0], dtype=float),
     goal_joint    = np.array([-170,0,0,0,0,0,0,0], dtype=float),
+    limit_n       = np.array([-180,-180,-180,-180,-180,-180,-1,-1], dtype=float),
+    limit_p       = np.array([180,180,180,180,180,180,1,1], dtype=float),
     scene         = scene,
     load          = load,
     tool          = np.array([0,0,0, 0,0,0], dtype=float),
